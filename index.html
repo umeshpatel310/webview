@@ -9,28 +9,24 @@
         function detectWebView() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Check for Android WebView
+            // Checking for common WebView indicators in Android and iOS
             if (/android/i.test(userAgent)) {
-                // Android WebView detection (checking for 'wv' in the user agent)
+                // Android WebView detection
                 if (/wv|yandex/i.test(userAgent)) {
-                    window.location.href = "layout.html"; // Open layout.html for WebView
+                    window.location.href = "test.html"; // Open page1.html for WebView
                 } else {
-                    window.location.href = "test.html"; // Open test.html for normal browser
+                    window.location.href = "layout.html"; // Open page2.html for normal browser
                 }
-            } 
-            // Check for iOS WebView
-            else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // iOS WebView detection (iOS 9+ may show 'AppleWebKit' in WebView)
-                if (window.navigator.standalone || (window.webkit && window.webkit.messageHandlers)) {
-                    // Detect if the app is running in standalone mode (PWA) or in a WebView
-                    window.location.href = "layout.html"; // Open layout.html for WebView
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                // iOS WebView detection
+                if (window.navigator.standalone || window.webkit.messageHandlers) {
+                    window.location.href = "test.html"; // Open page1.html for WebView
                 } else {
-                    window.location.href = "test.html"; // Open test.html for normal browser
+                    window.location.href = "layout.html"; // Open page2.html for normal browser
                 }
-            } 
-            // Default case for all other browsers (desktop or unknown environments)
-            else {
-                window.location.href = "test.html"; // Open test.html for regular browser
+            } else {
+                // Default case for browsers
+                window.location.href = "layout.html"; // Open page2.html for normal browsers
             }
         }
 
