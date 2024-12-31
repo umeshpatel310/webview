@@ -3,280 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebView vs Browser Example</title>
-    <style>
-        /* Default styles */
-        #content1 {
-           
-            display: none; /* Initially hide both contents */
-        }
-         .maindiv{
-            display: none;
-        }
-    </style>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;  /* Body ko 100% height dena */
-            overflow-x: hidden;  /* Horizontal scrollbar ko hide karna */
-        }
-        /* Div ke background me image add karna */
-        .background-div {
-            width: 100%;             /* Div ki width ko 100% set karna */
-            height: 450px;           /* Viewport height ke hisaab se height set karna */
-            background-image: url('images/webb.jpeg'); /* Background image */
-            background-size: cover; /* Image ko container ke hisaab se scale karna */
-            background-position: center; /* Image ko center me align karna */
-            background-repeat: no-repeat; /* Image ko repeat na hone dena */
-            display: grid;   
-            justify-content: space-between;        /* Flexbox layout for centering */
-            /* Horizontally center align */
-                 /* Vertically center align */
-            position: relative;  
-                /* Relative positioning for button */
-        }
+    <title>WebView or Browser Detection</title>
+    <script>
+        // Function to detect WebView or normal browser
+        function detectWebView() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        /* Stylish Download Button */
-        .download-btn {
-            background-color:transparent;  /* Green color */
-            color: white;                /* White text */
-            padding: 10px ;     
-            height: 20px;
-           width: 150px;
-            position: absolute;
-            top: 110%;
-            right: 7%;
-            font-size: 1.5rem;           /* Font size */
-            text-align: center;    
-           
-            text-decoration: none;       /* Remove underline */
-            border-radius: 5px;          /* Rounded corners */
-            border: 2px solid transparent; /* Transparent border for smooth effect */
-            cursor: pointer;            /* Pointer cursor */
-            transition: all 0.3s ease-in-out; /* Smooth transition */
-            box-shadow: 0 4px 6px rgb(251, 255, 2); /* Shadow for depth */
-        }
-
-        /* Hover and Active Button Effects */
-        .download-btn:hover {
-            background-color: #1000ee;  /* Darker green on hover */
-            transform: translateY(-5px); /* Button moves up */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
-        }
-
-        .tital{
-            color: white;
-            padding-left: 10px;
-            font-size: 23px;
-            opacity: 0;
-            transform: translateY(-50px);
-            animation: slideIn 2s forwards;
-            transition: opacity 0.5s ease;
-        }
-        @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
+            // Checking for common WebView indicators in Android and iOS
+            if (/android/i.test(userAgent)) {
+                // Android WebView detection
+                if (/wv|yandex/i.test(userAgent)) {
+                    window.location.href = "layout.html"; // Open page1.html for WebView
+                } else {
+                    window.location.href = "test.html"; // Open page2.html for normal browser
+                }
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                // iOS WebView detection
+                if (window.navigator.standalone || window.webkit.messageHandlers) {
+                    window.location.href = "layout.html"; // Open page1.html for WebView
+                } else {
+                    window.location.href = "test.html"; // Open page2.html for normal browser
+                }
+            } else {
+                // Default case for browsers
+                window.location.href = "layout.html"; // Open page2.html for normal browsers
             }
         }
 
-        /* Animation to fade text out */
-        @keyframes fadeOut {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-
-        .discription  {
-          color: white;
-        }
-        .div2{
-
-            display: grid;
-             position: absolute;
-              right: 10%;
-              margin-top: 60px;
-              justify-content: flex-end;
-        }
-        .maindiv{
-            width: 100%;
-            height: auto;
-            background-image: url(images/images\ \(6\).jpg);
-            background-repeat: no-repeat;
-            background-size: cover;
-            display: grid;
-        }
-        .imgdiv{
-            text-align: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          display: flex;
-        }
-        .imgdiv img {
-            width: 100px;
-          height: 100px;
-          
-        }
-        .imgdiv:hover {
-           
-            transform: translateY(-5px); /* Button moves up */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
-        }
-
-       
-        .about-content {
-            font-size: 18px;
-            color: #ffffff;
-            line-height: 1.6;
-            text-align: justify;
-            padding: 10px;
-        }
-        .highlight {
-            color: #2bff00;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 14px;
-            color: #fffdfd;
-        }
-       
-    </style>
+        // Call the function on page load
+        window.onload = detectWebView;
+    </script>
 </head>
 <body>
-
-    <!-- Content for WebView -->
-    <div id="content1">
-        <h2>Content for WebView</h2>
-        <p>This content is displayed when the page is opened in a WebView.</p>
-    </div>
-
-    <!-- Content for Browser -->
-    <div class="maindiv">
-        <div class="background-div">
-            <p id="title" class="tital">HonesTurnament.com</p>
-            
-            
-             <div class="div2" >
-               
-                <p class="discription">. Join the Ultimate Battlegrounds! .Participate in the most exciting
-                    <br>"BGMI & Free Fire Tournament ke liye humari website par aapka swagat hai!
-                    <br>Yahaan aapko exciting tournaments, live competitions,
-                    <br> apne gaming skills ko showcase karne ka mauka milega. 
-                    <br>Ab apne favorite game mein top players ke saath compete karein <br>aur jeetne ka apna chance badhayein.
-                       Registration aasaan,
-                       <br>prizes shandar – apne gaming journey ko next level tak le jaiye!
-                      
-                </p>
-                <a href="path_to_your_file.zip" download class="download-btn" >Download App</a>
-                
-                  
-             </div>
-             
-            
-              
-           
-        </div>
-
-        <div class="imgdiv" style="color: white;">
-             <p>Step .1 Open Application <br> click Signup</p>
-             <img src="images/loginpage.png">
-
-             <p>Step .2 Fill All Inbox And <br> Click Signup , Game user Name<br> Not Id</p>
-             <img src="images/sgnupage.png">
-
-             <p>Step .3 Now Bgmi And<br> Free Fire Button Choos<br> Your Game</p>
-             <img src="images/homepage.png">
-
-             <p>Step .4 Click Menu For<br> More Option</p>
-             <img src="images/menue.png">
-        </div>
-
-        <div class="about-content">
-            <p>
-                Our <span class="highlight">BGMI & Free Fire Tournament</span> is one of the most exciting and thrilling events of the year. 
-                Whether you are a passionate gamer or someone looking to prove your skills, this tournament is your chance to compete with the best players across the country.
-            </p>
-
-            <p>
-                In this tournament, players will battle it out in <span class="highlight">BGMI</span> and <span class="highlight">Free Fire</span>, two of the most popular mobile battle royale games. 
-                The competition will test your reflexes, strategy, teamwork, and overall gaming skills, making it a thrilling experience for both players and viewers.
-            </p>
-
-            <p>
-                The tournament will feature several rounds of intense action, with the best players advancing to the final stage. 
-                The winners will receive exciting prizes, recognition, and the ultimate title of champion.
-            </p>
-
-            <p>
-                So, gear up, register for the tournament, and show the world what you're made of!
-            </p>
-        </div>
-
-        <div class="footer" >
-            For more details and registration, visit our <a style="color: chartreuse;" href="#">official Instagram</a>.
-        </div>
-
-    </div>
-
-   
-    <script>
-        const texts = ["HonesTurnament.com", "Welcome to Honesturnament.Com"];
-        let currentTextIndex = 0;
-        const titleElement = document.getElementById('title');
-
-        function changeText() {
-            // Apply fade-out animation
-            titleElement.style.animation = "fadeOut 0.5s forwards";
-
-            // Wait for the fade-out animation to complete before changing text
-            setTimeout(() => {
-                // Change the text
-                titleElement.innerText = texts[currentTextIndex];
-
-                // Apply fade-in animation
-                titleElement.style.animation = "slideIn 2s forwards";
-
-                // Toggle between the two texts
-                currentTextIndex = (currentTextIndex + 1) % texts.length;
-            }, 500); // Delay to match the fade-out duration (500ms)
-        }
-
-        // Change text every 5 seconds
-        setInterval(changeText, 5000);
-
-    </script>
-
-    <script>
-        // Function to detect if the page is opened in WebView
-        function detectWebView() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            // Check if the user agent contains keywords like 'webview'
-            return (userAgent.includes('wv') || userAgent.includes('webview'));
-        }
-
-        // Show content based on whether it's WebView or Browser
-        window.onload = function() {
-            if (detectWebView()) {
-                // If WebView, show content1
-                document.getElementById('content1').style.display = 'block';
-            } else {
-                // Else if Browser, show content2
-                document.getElementById('maindiv').style.display = 'block';
-            }
-        };
-    </script>
-
+    <h1>WebView or Browser Detection</h1>
+    <p>Redirecting based on the environment...</p>
 </body>
 </html>
