@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebView vs Browser Example</title>
+    <style>
+        /* Default styles */
+        #content1, #content2 {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            display: none; /* Initially hide both contents */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Content for WebView -->
+    <div id="content1">
+        <h2>Content for WebView</h2>
+        <p>This content is displayed when the page is opened in a WebView.</p>
+    </div>
+
+    <!-- Content for Browser -->
+    <div id="content2">
+        <h2>Content for Browser</h2>
+        <p>This content is displayed when the page is opened in a browser.</p>
+    </div>
+
+    <script>
+        // Function to detect if the page is opened in WebView
+        function detectWebView() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            // Check if the user agent contains keywords like 'webview'
+            return (userAgent.includes('wv') || userAgent.includes('webview'));
+        }
+
+        // Show content based on whether it's WebView or Browser
+        window.onload = function() {
+            if (detectWebView()) {
+                // If WebView, show content1
+                document.getElementById('content1').style.display = 'block';
+            } else {
+                // Else if Browser, show content2
+                document.getElementById('content2').style.display = 'block';
+            }
+        };
+    </script>
+
+</body>
+</html>
