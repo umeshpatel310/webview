@@ -3,39 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SabPaisa Test API</title>
+    <title>SabPaisa Payment Gateway</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-md5"></script> <!-- Include MD5 library -->
     <script>
-        function callApi() {
-            var apiUrl = "https://testapi.sabpaisa.in"; // SabPaisa Test API URL
-            var endpoint = "/api/your-endpoint"; // Yahan aap apna API endpoint daal sakte hain
-            var fullUrl = apiUrl + endpoint;
+        // Function to generate the signature
+        function generateSignature(amount, orderId, customerId, callbackUrl, secretKey) {
+            // Concatenate data in the required format: amount|orderId|customerId|callbackUrl|secretKey
+            var data = amount + "|" + orderId + "|" + customerId + "|" + callbackUrl + "|" + secretKey;
+
+            // Generate MD5 hash (this will be your signature)
+            var signature = md5(data); // md5() function from js-md5 library
+            return signature;
+        }
+
+        // Function to initiate payment
+        function initiatePayment() {
+            var apiUrl = "https://stage-securepay.sabpaisa.in/SabPaisa/sabPaisaInit?v=1";  // SabPaisa API URL
+
+            // Payment details
+            var amount = "1000";  // Example payment amount (INR)
+            var orderId = "ORD123456";  // Unique Order ID
+            var customerId = "CUST123";  // Customer ID
+            var callbackUrl = "https://yourwebsite.com/payment-success";  // Callback URL after payment
+            var secretKey = "your_sabpaisa_secret_key";  // SabPaisa secret key (provided by SabPaisa)
             
-            // API call ke liye fetch request
-            fetch(fullUrl, {
-                method: 'GET', // Ya 'POST' agar aapko data bhejna ho
+            // Generate signature
+            var signature = generateSignature(amount, orderId, customerId, callbackUrl, secretKey);
+
+            // Prepare payment data
+            var paymentData = {
+                amount: amount,
+                orderId: orderId,
+                customerId: customerId,
+                customerName: "John Doe",  // Customer name
+                customerEmail: "johndoe@example.com",  // Customer email
+                customerPhone: "9876543210",  // Customer phone number
+                callbackUrl: callbackUrl,
+                signature: signature  // Signature for security
+            };
+
+            // Make the POST request to SabPaisa API
+            fetch(apiUrl, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Yahan apna access token daal sakte hain
-                }
+                },
+                body: JSON.stringify(paymentData)
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                document.getElementById("response").innerHTML = JSON.stringify(data, null, 2);
+                console.log("Payment Response:", data);
+                // Handle the response, if successful, redirect to the payment URL
+                if (data.status === 'success') {
+                    window.location.href = data.paymentUrl;  // Redirect to SabPaisa payment page
+                } else {
+                    alert("Payment initiation failed: " + data.message);  // Handle failure
+                }
             })
             .catch(error => {
-                console.error('Error:', error);
-                document.getElementById("response").innerHTML = "Error: " + error;
+                console.error("Error:", error);
+                alert("An error occurred while initiating the payment.");
             });
         }
     </script>
 </head>
 <body>
     <div style="text-align: center;">
-        <h1>Test SabPaisa API</h1>
-        <button onclick="callApi()">Call API</button>
-        <h2>API Response:</h2>
-        <pre id="response" style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;"></pre>
+        <h1>SabPaisa Payment Gateway</h1>
+        <button onclick="initiatePayment()">Initiate Payment</button>
     </div>
 </body>
 </html>
