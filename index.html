@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebView or Browser Detection</title>
+    <title>SabPaisa Test API</title>
     <script>
-        // Function to detect WebView or normal browser
-        function detectWebView() {
-            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            // Checking for common WebView indicators in Android and iOS
-            if (/android/i.test(userAgent)) {
-                // Android WebView detection
-                if (/wv|yandex/i.test(userAgent)) {
-                    window.location.href = "test.html"; // Open page1.html for WebView
-                } else {
-                    window.location.href = "layout.html"; // Open page2.html for normal browser
+        function callApi() {
+            var apiUrl = "https://testapi.sabpaisa.in"; // SabPaisa Test API URL
+            var endpoint = "/api/your-endpoint"; // Yahan aap apna API endpoint daal sakte hain
+            var fullUrl = apiUrl + endpoint;
+            
+            // API call ke liye fetch request
+            fetch(fullUrl, {
+                method: 'GET', // Ya 'POST' agar aapko data bhejna ho
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Yahan apna access token daal sakte hain
                 }
-            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // iOS WebView detection
-                if (window.navigator.standalone || window.webkit.messageHandlers) {
-                    window.location.href = "test.html"; // Open page1.html for WebView
-                } else {
-                    window.location.href = "layout.html"; // Open page2.html for normal browser
-                }
-            } else {
-                // Default case for browsers
-                window.location.href = "layout.html"; // Open page2.html for normal browsers
-            }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById("response").innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("response").innerHTML = "Error: " + error;
+            });
         }
-
-        // Call the function on page load
-        window.onload = detectWebView;
     </script>
 </head>
 <body>
-   
+    <div style="text-align: center;">
+        <h1>Test SabPaisa API</h1>
+        <button onclick="callApi()">Call API</button>
+        <h2>API Response:</h2>
+        <pre id="response" style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;"></pre>
+    </div>
 </body>
 </html>
